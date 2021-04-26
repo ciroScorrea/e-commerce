@@ -10,12 +10,11 @@ const cartItens      = document.querySelector('.cart-items')
 const bannerBtn      = document.querySelector('.banner-btn')
 const ourProducts    = document.querySelector('.products')
 
-const products = new Item()
+const products = new Product()
 
 getProducts()
-.then(data => console.log('resolved:', products.productsList(data)))
+.then(data => products.productsList(data))
 .catch(err => console.log('rejected', err.message)) 
-
 
 const mainCart = new Cart()
 cartIcon.addEventListener('click', e => {
@@ -36,8 +35,8 @@ bannerBtn.addEventListener('click', e => {
 //Adiciona novo item ou incrementa se já existente
 productsCenter.addEventListener('click', e =>{
     if(e.target.className === 'bag-btn' & e.target.nodeName === 'BUTTON'){
-        const id = e.target.getAttribute('data-id')
-        const result = mainCart.searchItem(id)
+        const result = mainCart.searchItem(e.target.getAttribute('data-id'))
+        console.log(result)
         if(result === 0){
             getProducts(e.target.getAttribute('data-id'))
             .then(data => console.log('resolved:', mainCart.addItem(data)))

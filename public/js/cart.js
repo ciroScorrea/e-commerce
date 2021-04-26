@@ -19,11 +19,11 @@ class Cart {
         let product = data[0]
         cartContent.innerHTML += 
         `
-        <div class="cart-item" data-id=${product.sys.id}>
-            <img src=${product.fields.image.fields.file.url} alt="product">
+        <div class="cart-item" data-id=${product._id}>
+            <img src=/products/${product._id}/image alt="product">
             <div>
-                <h4>${product.fields.title}</h4>
-                <h5>${product.fields.price}</h5>
+                <h4>${product.title}</h4>
+                <h5>${product.price}</h5>
                 <span class="remove-item">remove</span>
             </div>
             <div>
@@ -34,33 +34,33 @@ class Cart {
         </div>
         `
         cartItens.innerHTML = parseInt(cartItens.innerHTML) + 1
-        cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 + product.fields.price*100))/100
+        cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 + product.price*100))/100
         return 'produto adicionado'
     }
     increaseItem(data){
         let product = data[0]
         Array.from(cartContent.children).forEach(e =>{
-            if(e.getAttribute('data-id') === product.sys.id){
+            if(e.getAttribute('data-id') === product._id){
                 let qtyTag = parseInt(e.querySelector('p').innerHTML)
                 qtyTag = qtyTag + 1
                 e.querySelector('p').innerHTML = qtyTag
                 cartItens.innerHTML = parseInt(cartItens.innerHTML) + 1
-                cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 + product.fields.price*100))/100
+                cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 + product.price*100))/100
             } 
         })
     }
     decreaseItem(data){
         let product = data[0]
         Array.from(cartContent.children).forEach(e =>{
-            if(e.getAttribute('data-id') === product.sys.id){
+            if(e.getAttribute('data-id') === product_.id){
                 let qtyTag = parseInt(e.querySelector('p').innerHTML)
                 if(qtyTag > 1){
                     qtyTag = qtyTag - 1
                     e.querySelector('p').innerHTML = qtyTag
                     cartItens.innerHTML = parseInt(cartItens.innerHTML) - 1
                     console.log(parseFloat(cartTotal.innerHTML))
-                    console.log(product.fields.price)
-                    cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 - product.fields.price*100))/100
+                    console.log(product.price)
+                    cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 - product.price*100))/100
                 } else {
                     this.removeItem(data)
                 } 
@@ -80,10 +80,10 @@ class Cart {
     removeItem(data){
         let product = data[0]
         Array.from(cartContent.children).forEach(e =>{
-            if(e.getAttribute('data-id') === product.sys.id){
+            if(e.getAttribute('data-id') === product._id){
                 const qty = parseInt(this.itemQty(e.getAttribute('data-id')))
                 cartItens.innerHTML = parseInt(cartItens.innerHTML) - qty
-                cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 - product.fields.price*100))/100
+                cartTotal.innerHTML = Math.round((Number(cartTotal.innerHTML)*100 - product.price*100))/100
                 e.remove()
             } 
         })

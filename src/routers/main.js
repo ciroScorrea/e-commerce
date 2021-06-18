@@ -8,4 +8,8 @@ router.get('/', async (req,res) => {
     res.render('index')
 })
 
+router.get('/maintenance', async (req,res) => {
+    res.render('maintenance')
+})
+
 module.exports = router

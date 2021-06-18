@@ -1,0 +1,43 @@
+<header>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="navbar-center">
+            <span class="nav-icon">
+                <a class="btn btn-secondary dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="/">Home</a></li>
+                <li><a class="dropdown-item" href="/newproduct">New Product</a></li>
+                <li><a class="dropdown-item" href="/maintenance">Edit Products</a></li>
+            </ul>
+            </span>
+            <img src="./img/logo.svg" alt="store logo">
+            <div class="cart-btn" data-id="#">
+                <span class="nav-icon">
+                    <i class="fas fa-cart-plus"></i>
+                </span>
+                <div class="cart-items">0</div>
+            </div>
+        </div>
+    </nav>
+    <!-- end of navbar -->
+    <!-- cart -->
+    <div class="cart-overlay">
+        <div class="cart">
+            <span class="close-cart">
+                <i class="fas fa-window-close"></i>
+            </span>
+            <h2>your cart</h2>
+            <div class="cart-content">
+            </div>
+            <div class="cart-footer">
+                <h3>your total: $ <span class="cart-total">0</span></h3>
+                <button class="clear-cart clear-btn">clear cart</button>
+            </div>
+        </div>
+    </div>
+    <!-- end of cart -->
+    <script src="./js/cartClass.js"></script>
+    <script src="./js/header.js"></script>
+</header>

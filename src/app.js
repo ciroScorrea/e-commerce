@@ -7,16 +7,17 @@ const path = require('path')
 //Express.js view engine for handlebars.js
 const hbs = require('hbs')
 // Define paths for Express concatenating __dirname (project directory) with the subsequent string
-const publicDirectory = path.join(__dirname, '../public/')
-console.log('Public: ', publicDirectory)
+const publicDirectory = path.join(__dirname, '../public')
+//console.log('Public: ', publicDirectory)
 const viewsPath = path.join(__dirname, '../templates/views')
-console.log('Views: ', viewsPath)
+//console.log('Views: ', viewsPath)
 const partialsPath = path.join(__dirname, '../templates/partials')
-console.log('Path: ', partialsPath)
+//console.log('Path: ', partialsPath)
 
 // Routers
 const productRouter = require('./routers/product.js')
 const mainRouter = require('./routers/main.js')
+const cartRouter = require('./routers/cart.js')
 
 const app = express()
 
@@ -33,5 +34,6 @@ app.use(express.json())
 //
 app.use(mainRouter)
 app.use(productRouter)
+app.use(cartRouter)
 
 module.exports = app

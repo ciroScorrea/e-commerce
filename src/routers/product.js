@@ -3,40 +3,23 @@ const express = require('express')
 const multer = require('multer')
 //Sharp: High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, AVIF and TIFF image
 const sharp = require('sharp')
-const router = new express.Router()
 const Product = require('../models/product')
+const Cart = require('../models/cart')
+
+const router = new express.Router()
 
 router.get('/products', async (req, res) => {
     const match = {}
     const sort = {}
-/*
-    if(req.query.sortBy){
-        const parts = req.query.sortBy.split('_')
-        sort[parts[0]] = parts[1] === 'desc' ? -1 :0
-    }
-
-    try{
-        await products.populate({
-            path: 'products',
-            options: {
-                limit: parseInt(req.query.limit),
-                skip: parseInt(req.query.skip),
-                sort
-            }
-        }).execPopulate()
-        res.send(products)
-    } catch(e){
-        res.status(500).send()
-    }*/
     const products = await Product.find() 
     try{
         res.send(products)
     } catch(e){
         res.status(500).send()
     }
-  })
+})
 
-router.get('/products/:id/image', async (req, res) => {
+router.get('/products/image/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
         if (!product || !product.image){
@@ -45,7 +28,7 @@ router.get('/products/:id/image', async (req, res) => {
         res.set('Content-Type', 'image/jpg')
         res.send(product.image)
     } catch (e) {
-        res.status(404).send()
+        res.status(400).send('Imagem não encontrada')
     }
 })
 
@@ -78,7 +61,7 @@ const upload = multer({
     }
 })
 
-router.post('/newproduct/image/:id', /*productNew,*/ upload.single('image'), async (req, res)=> {
+router.post('/newproduct/image/:id', /*auth,*/ upload.single('image'), async (req, res)=> {
         const product = await Product.findOne({_id : req.params.id})
         if(!product){
             return res.status(404).send()
@@ -90,5 +73,68 @@ router.post('/newproduct/image/:id', /*productNew,*/ upload.single('image'), asy
     }, (error, req, res, next) => {
     res.status(400).send({error: error.message})
 })
+
+router.get('/product/:id', async(req, res) => {
+    const product = await Product.findById(req.params.id)
+        try{
+            res.render('updateproduct', {
+                title: product.title,
+                price: product.price,
+                id: product._id
+            })            
+        } catch(e) {
+            res.status(500).send()
+        }
+    
+})
+
+router.get('/prod/:id', async(req, res) => {
+    const product = await Product.findById(req.params.id)
+    try{
+        res.send(product)
+    } catch(e){
+        res.status(500).send()
+    }    
+})
+
+router.delete('/product/:id', async(req, res) =>{
+    try{
+        const product = await Product.findOneAndDelete({_id: req.params.id})
+        if(!product){
+            return res.status(404).send()
+        }
+        res.send()
+    } catch(e){
+        res.status(500).send()
+    }
+})
+
+router.put('/product/:id', /*auth, */ async (req, res)=>{
+    const updates = Object.keys(req.body)
+
+    try{
+        const product = await Product.findOne({ _id: req.params.id})
+        
+        if(!product){
+            return res.status(404).send()
+        }
+        updates.forEach( update =>product[update] = req.body[update])
+        await product.save()
+
+        const carts = await Cart.find({ "products.product" : product._id})
+        carts.forEach(async function (cart) {
+            cart.valueTotal = 0
+            cart.products.forEach(item => {
+                cart.valueTotal += item.qty * product.price 
+            })
+            await cart.save()
+        })
+
+        res.send(product)
+    } catch (e){
+        res.status(400).send({error: e})
+    }    
+})
+
 
 module.exports = router

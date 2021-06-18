@@ -20,6 +20,9 @@ const productSchema = new mongoose.Schema({
     image: {
         type: Buffer
     }
+}, {
+    collection: 'product',
+    timestamps: true
 })
 
 const Product = mongoose.model('Product', productSchema)

@@ -1,0 +1,9 @@
+.container-background {
+    background: rgba(255, 255, 255, 0.8);    
+  }
+.container-title {
+  font-size: 1.7rem;
+  text-align: center;
+  letter-spacing: var(--mainSpacing);
+  margin-bottom: 3rem;
+}
